@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  postgres-drive-app:
+    image: postgres:14.2
+    container_name: postgres-drive-app
+    ports:
+      - 5432:5432
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: drivedb
+    volumes:
+      - ./db-data/postgres/:/var/lib/postgresql/data/
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq-drive-app
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
