@@ -1,25 +1,34 @@
 package queue
 
+import (
+	"fmt"
+	"log"
+	"reflect"
+)
+
 const (
 	RABBITMQ QueueType = iota
 )
 
 type QueueType int
 
-func New(config any, queueType QueueType) *Queue {
-	q := new(Queue)
+func New(config any, queueType QueueType) (queue *Queue, err error) {
+	rt := reflect.TypeOf(config)
 
 	switch queueType {
 	case RABBITMQ:
-		fmt.Println("nao implementado")
+
+		if rt.Name() != "RabbitMQConfig" {
+			return nil, fmt.Errorf("Config need's to be of type RabbitMQConfig")
+		}
+
 	default:
 		log.Fatal("type not implemented")
 	}
 
-	q.config = config
-	queueType = queueType
+	queue.config = config
 
-	return q
+	return
 }
 
 type QueueConnection interface {
@@ -28,7 +37,7 @@ type QueueConnection interface {
 }
 
 type Queue struct {
-	config any
+	config          any
 	queueConnection QueueConnection
 }
 
@@ -39,7 +48,3 @@ func (q *Queue) Publish(message []byte) error {
 func (q *Queue) Consume() error {
 	return q.queueConnection.Consume()
 }
-
-
-
-
