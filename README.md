@@ -1,3 +1,3 @@
 # drive-app
 
-![Diagram Drive](diagrams/assets/drive-app.svg)
+![Diagram Drive](docs/diagrams/assets/drive-app.svg)
