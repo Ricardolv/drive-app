@@ -30,7 +30,7 @@ func New(config any, bucketType BucketType) (bucket *Bucket, err error) {
 type BucketInterface interface {
 	Upload(io.Reader, string) error
 	Download(string, string) (*os.File, error)
-	Delete() error
+	Delete(string) error
 }
 
 type Bucket struct {
@@ -45,6 +45,6 @@ func (b *Bucket) Download(src, dst string) (*os.File, error) {
 	return b.p.Download(src, dst)
 }
 
-func (b *Bucket) Delete() error {
-	return b.p.Delete()
+func (b *Bucket) Delete(key string) error {
+	return b.p.Delete(key)
 }
