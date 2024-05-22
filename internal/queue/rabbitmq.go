@@ -18,6 +18,13 @@ type RabbitmqConnection struct {
 	connection *amqp.Connection
 }
 
+func newRabbitMQConnection(config RabbitMQConfig) (rc *RabbitmqConnection, err error) {
+	rc.config = config
+	rc.connection, err = amqp.Dial(config.URL)
+
+	return rc, err
+}
+
 func (rc *RabbitmqConnection) Publish(message []byte) error {
 
 	channel, err := rc.connection.Channel()
@@ -44,7 +51,7 @@ func (rc *RabbitmqConnection) Publish(message []byte) error {
 		mp)
 }
 
-func (rc *RabbitmqConnection) Consume() error {
+func (rc *RabbitmqConnection) Consume(queueResp chan<- QueueResponse) error {
 
 	channel, err := rc.connection.Channel()
 	if err != nil {
@@ -62,8 +69,12 @@ func (rc *RabbitmqConnection) Consume() error {
 		return err
 	}
 
-	for d := range msgs {
+	for response := range msgs {
+		queueResponse := QueueResponse{}
+		queueResponse.UnmarshalJSON(response.Body)
 
+		queueResp <- queueResponse
 	}
 
+	return nil
 }
