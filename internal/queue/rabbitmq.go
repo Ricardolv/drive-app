@@ -17,3 +17,11 @@ type RabbitmqConnection struct {
 	config RabbitMQConfig
 	connection *amqp.Connection
 }
+
+func (rc *RabbitmqConnection) Publish(message []byte) error {
+
+}
+
+func (rc *RabbitmqConnection) Conume() error {
+
+}
