@@ -5,7 +5,7 @@ import "encoding/json"
 type QueueResponse struct {
 	Filename string `json:"filename"`
 	Path     string `json:"path"`
-	Id       int    `json:"id"`
+	ID       int    `json:"id"`
 }
 
 func (response *QueueResponse) MarshalJSON() ([]byte, error) {
