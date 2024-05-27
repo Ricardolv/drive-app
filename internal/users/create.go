@@ -32,7 +32,7 @@ func (h *handler) Create(rw http.ResponseWriter, rq *http.Request) {
 
 	user.ID = id
 
-	rw.Header().Set("Content-Type", "application/")
+	rw.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(rw).Encode(user)
 
 }

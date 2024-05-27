@@ -38,7 +38,7 @@ func (h *handler) Modifier(rw http.ResponseWriter, rq *http.Request) {
 
 	//TODO GET id
 
-	rw.Header().Set("Content-Type", "application/")
+	rw.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(rw).Encode(user)
 }
 

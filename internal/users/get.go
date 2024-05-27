@@ -23,7 +23,7 @@ func (h *handler) Get(rw http.ResponseWriter, rq *http.Request) {
 		return
 	}
 
-	rw.Header().Set("Content-Type", "application/")
+	rw.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(rw).Encode(user)
 }
 

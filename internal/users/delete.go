@@ -23,7 +23,7 @@ func (h *handler) Delete(rw http.ResponseWriter, rq *http.Request) {
 		return
 	}
 
-	rw.Header().Set("Content-Type", "application/")
+	rw.Header().Set("Content-Type", "application/json")
 }
 
 func Delete(db *sql.DB, id int64) error {
