@@ -44,7 +44,6 @@ func (h *handler) Modifier(rw http.ResponseWriter, rq *http.Request) {
 
 func Update(db *sql.DB, id int64, user *User) error {
 	user.ModifiedAt = time.Now()
-
 	stmt := `update "users" set "name"=$1, "modified"=$2 where id=$3`
 
 	_, err := db.Exec(stmt, user.Name, user.ModifiedAt, id)
