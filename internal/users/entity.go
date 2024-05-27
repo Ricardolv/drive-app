@@ -27,6 +27,11 @@ func New(name, login, password string) (*User, error) {
 		return nil, err
 	}
 
+	err = user.Validate()
+	if err != nil {
+		return nil, err
+	}
+
 	return &user, nil
 }
 
