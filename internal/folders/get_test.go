@@ -45,10 +45,10 @@ func TestGetSubFolder(t *testing.T) {
 		AddRow(4, 3, "Projects 4", time.Now(), time.Now(), false)
 
 	mock.ExpectQuery(regexp.QuoteMeta(`select * from "folders" where "parent_id"=$1 and "deleted"=false`)).
-		WithArgs().
+		WithArgs(3).
 		WillReturnRows(rows)
 
-	_, err = GetFolder(db, 3)
+	_, err = getSubFolder(db, 3)
 	if err != nil {
 		t.Error(err)
 	}
