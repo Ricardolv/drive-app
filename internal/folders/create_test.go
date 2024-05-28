@@ -14,13 +14,13 @@ func TestInsert(t *testing.T) {
 	}
 	defer db.Close()
 
-	f, err := New("Richard", 1)
+	f, err := New("Photos", 1)
 	if err != nil {
 		t.Error(err)
 	}
 
 	mock.ExpectExec(regexp.QuoteMeta(`insert into "folders" ("parent_id", "name", "modified_at") VALUES ($1, $2, $3)`)).
-		WithArgs(1, "Richard", f.ModifiedAt).
+		WithArgs(1, "Photos", AnyTime{}).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	_, err = Insert(db, f)
