@@ -2,16 +2,16 @@ package queue
 
 import "encoding/json"
 
-type QueueResponse struct {
+type Message struct {
 	Filename string `json:"filename"`
 	Path     string `json:"path"`
 	ID       int    `json:"id"`
 }
 
-func (response *QueueResponse) MarshalJSON() ([]byte, error) {
+func (response *Message) Marshal() ([]byte, error) {
 	return json.Marshal(response)
 }
 
-func (response *QueueResponse) UnmarshalJSON(data []byte) error {
+func (response *Message) Unmarshal(data []byte) error {
 	return json.Unmarshal(data, response)
 }

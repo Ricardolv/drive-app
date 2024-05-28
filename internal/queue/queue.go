@@ -38,7 +38,7 @@ func New(config any, queueType QueueType) (queue *Queue, err error) {
 
 type QueueConnection interface {
 	Publish([]byte) error
-	Consume(chan<- QueueResponse) error
+	Consume(chan<- Message) error
 }
 
 type Queue struct {
@@ -49,6 +49,6 @@ func (q *Queue) Publish(message []byte) error {
 	return q.queueConnection.Publish(message)
 }
 
-func (q *Queue) Consume(queueResp chan<- QueueResponse) error {
+func (q *Queue) Consume(queueResp chan<- Message) error {
 	return q.queueConnection.Consume(queueResp)
 }
