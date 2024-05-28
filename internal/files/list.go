@@ -2,7 +2,7 @@ package files
 
 import "database/sql"
 
-func list(db *sql.DB, folderID int64) ([]File, error) {
+func List(db *sql.DB, folderID int64) ([]File, error) {
 	stmt := `select * from "files" where folder_id = $1`
 	rows, err := db.Query(stmt, folderID)
 	if err != nil {
