@@ -6,6 +6,6 @@ CREATE TABLE users(
                         created_at TIMESTAMP default current_timestamp,
                         modified_at TIMESTAMP NOT NULL,
                         deleted BOOL NOT NULL DEFAULT false,
-                        las_login TIMESTAMP default current_timestamp,
+                        last_login TIMESTAMP default current_timestamp,
                         PRIMARY KEY(id)
 )
