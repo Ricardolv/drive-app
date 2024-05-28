@@ -9,8 +9,8 @@ var (
 	ErrNameRequired = errors.New("name is required and can't be blank")
 )
 
-func New(name string, parentID int64) (*Folders, error) {
-	folders := Folders{
+func New(name string, parentID int64) (*Folder, error) {
+	folders := Folder{
 		Name:     name,
 		ParentID: parentID,
 	}
@@ -23,20 +23,33 @@ func New(name string, parentID int64) (*Folders, error) {
 	return &folders, nil
 }
 
-type Folders struct {
+type Folder struct {
 	ID         int64     `json:"id"`
-	ParentID   int64     `json:"ParentID"`
+	ParentID   int64     `json:"parentID"`
 	Name       string    `json:"name"`
-	CreatedAt  time.Time `json:"CreatedAt"`
-	ModifiedAt time.Time `json:"ModifiedAt"`
+	CreatedAt  time.Time `json:"createdAt"`
+	ModifiedAt time.Time `json:"modifiedAt"`
 	Deleted    bool      `json:"-"`
 }
 
-func (folders *Folders) Validate() error {
+func (folders *Folder) Validate() error {
 
 	if folders.Name == "" {
 		return ErrNameRequired
 	}
 
 	return nil
+}
+
+type FolderContent struct {
+	Folder  Folder           `json:"folder"`
+	Content []FolderResource `json:"content"`
+}
+
+type FolderResource struct {
+	ID         int64     `json:"id"`
+	Name       string    `json:"name"`
+	Type       string    `json:"type"`
+	CreatedAt  time.Time `json:"createdAt"`
+	ModifiedAt time.Time `json:"modifiedAt"`
 }

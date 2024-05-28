@@ -8,7 +8,7 @@ import (
 
 func (h *handler) Create(rw http.ResponseWriter, rq *http.Request) {
 
-	folders := new(Folders)
+	folders := new(Folder)
 
 	err := json.NewDecoder(rq.Body).Decode(folders)
 	if err != nil {
@@ -34,7 +34,7 @@ func (h *handler) Create(rw http.ResponseWriter, rq *http.Request) {
 	json.NewEncoder(rw).Encode(folders)
 }
 
-func Insert(db *sql.DB, folders *Folders) (int64, error) {
+func Insert(db *sql.DB, folders *Folder) (int64, error) {
 	stmt := `insert into "folders" ("parent_id", "name", "modified_at") VALUES ($1, $2, $3)`
 
 	result, err := db.Exec(stmt, folders.ParentID, folders.Name, folders.ModifiedAt)

@@ -39,10 +39,10 @@ type User struct {
 	Name       string    `json:"name"`
 	Login      string    `json:"login"`
 	Password   string    `json:"password"`
-	CreatedAt  time.Time `json:"CreatedAt"`
-	ModifiedAt time.Time `json:"ModifiedAt"`
+	CreatedAt  time.Time `json:"createdAt"`
+	ModifiedAt time.Time `json:"modifiedAt"`
 	Deleted    bool      `json:"-"`
-	LastLogin  time.Time `json:"LastLogin"`
+	LastLogin  time.Time `json:"lastLogin"`
 }
 
 func (u *User) SetPassword(password string) error {

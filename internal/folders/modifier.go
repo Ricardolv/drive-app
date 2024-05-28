@@ -11,7 +11,7 @@ import (
 )
 
 func (h *handler) Modifier(rw http.ResponseWriter, rq *http.Request) {
-	folders := new(Folders)
+	folders := new(Folder)
 
 	err := json.NewDecoder(rq.Body).Decode(folders)
 	if err != nil {
@@ -43,7 +43,7 @@ func (h *handler) Modifier(rw http.ResponseWriter, rq *http.Request) {
 	json.NewEncoder(rw).Encode(folders)
 }
 
-func Update(db *sql.DB, id int64, folders *Folders) error {
+func Update(db *sql.DB, id int64, folders *Folder) error {
 	folders.ModifiedAt = time.Now()
 	stmt := `update "folders" set "name"=$1, "modified"=$2 where id=$3`
 

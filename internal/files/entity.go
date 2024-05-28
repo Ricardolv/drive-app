@@ -18,12 +18,12 @@ var (
 type File struct {
 	ID         int64     `json:"id"`
 	FolderID   int64     `json:"-"`
-	OwnerID    int64     `json:"OwnerID"`
+	OwnerID    int64     `json:"ownerID"`
 	Name       string    `json:"name"`
-	Type       string    `json:"Type"`
+	Type       string    `json:"type"`
 	Path       string    `json:"-"`
-	CreatedAt  time.Time `json:"CreatedAt"`
-	ModifiedAt time.Time `json:"ModifiedAt"`
+	CreatedAt  time.Time `json:"createdAt"`
+	ModifiedAt time.Time `json:"modifiedAt"`
 	Deleted    bool      `json:"-"`
 }
 
