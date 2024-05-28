@@ -17,13 +17,11 @@ func (h *handler) Delete(rw http.ResponseWriter, rq *http.Request) {
 		return
 	}
 
-	err = deleteFiles(h.db, int64(id))
+	err = deleteFolderContent(h.db, int64(id))
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	//TODO list folders
 
 	err = Delete(h.db, int64(id))
 	if err != nil {
@@ -35,12 +33,45 @@ func (h *handler) Delete(rw http.ResponseWriter, rq *http.Request) {
 
 }
 
-func Delete(db *sql.DB, id int64) error {
-	stmt := `update "folders" set "modified"=$1, deleted=true where id=$2`
+func deleteFolderContent(db *sql.DB, folderID int64) error {
+	err := deleteFiles(db, folderID)
+	if err != nil {
+		return err
+	}
 
-	_, err := db.Exec(stmt, time.Now(), id)
+	return deleteSubFolders(db, folderID)
+}
 
-	return err
+func deleteSubFolders(db *sql.DB, folderID int64) error {
+
+	subFolders, err := getSubFolder(db, folderID)
+	if err != nil {
+		return err
+	}
+
+	removedFiles := make([]Folder, 0, len(subFolders))
+	for _, sf := range subFolders {
+		err := Delete(db, sf.ID)
+		if err != nil {
+			break
+		}
+
+		err = deleteFolderContent(db, sf.ID)
+		if err != nil {
+			Update(db, sf.ID, &sf)
+			break
+		}
+
+		removedFiles = append(removedFiles, sf)
+	}
+
+	if len(subFolders) != len(removedFiles) {
+		for _, sf := range removedFiles {
+			Update(db, sf.ID, &sf)
+		}
+	}
+
+	return nil
 }
 
 func deleteFiles(db *sql.DB, folderID int64) error {
@@ -70,4 +101,12 @@ func deleteFiles(db *sql.DB, folderID int64) error {
 	}
 
 	return nil
+}
+
+func Delete(db *sql.DB, id int64) error {
+	stmt := `update "folders" set "modified"=$1, deleted=true where id=$2`
+
+	_, err := db.Exec(stmt, time.Now(), id)
+
+	return err
 }

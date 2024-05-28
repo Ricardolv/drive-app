@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/Ricardolv/drive-app/internal/files"
 	"github.com/go-chi/chi"
 )
 
@@ -40,14 +41,14 @@ func GetFolder(db *sql.DB, id int64) (*Folder, error) {
 	stmt := `select * from "folders" where id=$1`
 	row := db.QueryRow(stmt)
 
-	var folders Folder
-	err := row.Scan(&folders.ID, &folders.ParentID, &folders.Name,
-		&folders.CreatedAt, &folders.ModifiedAt, &folders.Deleted)
+	var folder Folder
+	err := row.Scan(&folder.ID, &folder.ParentID, &folder.Name,
+		&folder.CreatedAt, &folder.ModifiedAt, &folder.Deleted)
 	if err != nil {
 		return nil, err
 	}
 
-	return &folders, nil
+	return &folder, nil
 }
 
 func GetFolderContent(db *sql.DB, folderID int64) ([]FolderResource, error) {
@@ -67,6 +68,23 @@ func GetFolderContent(db *sql.DB, folderID int64) ([]FolderResource, error) {
 		}
 		fr = append(fr, resource)
 	}
+
+	folderList, err := files.List(db, folderID)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, f := range folderList {
+		resource := FolderResource{
+			ID:         f.ID,
+			Name:       f.Name,
+			Type:       f.Type,
+			CreatedAt:  f.CreatedAt,
+			ModifiedAt: f.ModifiedAt,
+		}
+		fr = append(fr, resource)
+	}
+
 	return fr, nil
 }
 
