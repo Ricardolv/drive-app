@@ -1,4 +1,4 @@
-package users
+package files
 
 import (
 	"database/sql"
@@ -10,7 +10,6 @@ import (
 )
 
 func (h *handler) Delete(rw http.ResponseWriter, rq *http.Request) {
-
 	id, err := strconv.Atoi(chi.URLParam(rq, "id"))
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
@@ -23,11 +22,11 @@ func (h *handler) Delete(rw http.ResponseWriter, rq *http.Request) {
 		return
 	}
 
-	rw.Header().Set("Content-Type", "application/json")
+	rw.Header().Add("Content-Type", "application/json")
 }
 
 func Delete(db *sql.DB, id int64) error {
-	stmt := `update "users" set "modified_at"=$1, deleted=true where id=$2`
+	stmt := `update "files" set "modified_at"=$1, deleted=true where id=$2`
 
 	_, err := db.Exec(stmt, time.Now(), id)
 
