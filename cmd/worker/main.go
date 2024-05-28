@@ -28,7 +28,7 @@ func main() {
 		panic(err)
 	}
 
-	chanel := make(chan queue.QueueResponse)
+	chanel := make(chan queue.Message)
 	qc.Consume(chanel)
 
 	bcfg := bucket.AwsConfig{

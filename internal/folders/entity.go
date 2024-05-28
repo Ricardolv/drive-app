@@ -11,8 +11,9 @@ var (
 
 func New(name string, parentID int64) (*Folder, error) {
 	folders := Folder{
-		Name:     name,
-		ParentID: parentID,
+		Name:       name,
+		ParentID:   parentID,
+		ModifiedAt: time.Now(),
 	}
 
 	err := folders.Validate()
