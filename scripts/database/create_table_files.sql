@@ -1,6 +1,6 @@
 CREATE TABLE files(
                         id SERIAL,
-                        folders_id INT,
+                        folder_id INT,
                         owner_id INT NOT NULL,
                         name varchar(200) NOT NULL,
                         type varchar(50) NOT NULL,
