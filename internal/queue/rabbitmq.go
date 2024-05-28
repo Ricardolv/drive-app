@@ -51,7 +51,7 @@ func (rc *RabbitmqConnection) Publish(message []byte) error {
 		mp)
 }
 
-func (rc *RabbitmqConnection) Consume(queueResp chan<- QueueResponse) error {
+func (rc *RabbitmqConnection) Consume(queueResp chan<- Message) error {
 
 	channel, err := rc.connection.Channel()
 	if err != nil {
@@ -70,10 +70,10 @@ func (rc *RabbitmqConnection) Consume(queueResp chan<- QueueResponse) error {
 	}
 
 	for response := range msgs {
-		queueResponse := QueueResponse{}
-		queueResponse.UnmarshalJSON(response.Body)
+		message := Message{}
+		message.Unmarshal(response.Body)
 
-		queueResp <- queueResponse
+		queueResp <- message
 	}
 
 	return nil
