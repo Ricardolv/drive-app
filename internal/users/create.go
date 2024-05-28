@@ -32,13 +32,13 @@ func (h *handler) Create(rw http.ResponseWriter, rq *http.Request) {
 
 	user.ID = id
 
-	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusCreated)
+	rw.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(rw).Encode(user)
-
 }
 
 func Insert(db *sql.DB, user *User) (int64, error) {
-	stmt := `insert into "users" ("name", "login", "password", "modified_at") VALUES (:name, :login, :password, :modified_at) VALUES ($1, $2, $3, $4)`
+	stmt := `insert into "users" ("name", "login", "password", "modified_at") VALUES ($1, $2, $3, $4)`
 
 	result, err := db.Exec(stmt, user.Name, user.Login, user.Password, user.ModifiedAt)
 	if err != nil {
