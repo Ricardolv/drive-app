@@ -47,6 +47,11 @@ func TestCreate(t *testing.T) {
 		t.Errorf("Error: %v", rr)
 	}
 
+	err = mock.ExpectationsWereMet()
+	if err != nil {
+		t.Error(err)
+	}
+
 }
 
 func TestInsert(t *testing.T) {

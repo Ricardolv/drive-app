@@ -19,7 +19,6 @@ func TestGet(t *testing.T) {
 		AddRow(1, "Richard", "richardluizv@gmail.com", "123456", time.Now(), time.Now(), false, time.Now())
 
 	mock.ExpectQuery(regexp.QuoteMeta(`select * from "users" where id=$1`)).
-		WithArgs().
 		WillReturnRows(rows)
 
 	_, err = Get(db, 1)
