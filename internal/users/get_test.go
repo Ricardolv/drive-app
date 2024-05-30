@@ -1,9 +1,7 @@
 package users
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"regexp"
@@ -24,21 +22,8 @@ func TestGet(t *testing.T) {
 
 	h := handler{db}
 
-	u := User{
-		ID:   1,
-		Name: "Richard Viana",
-	}
-
-	u.SetPassword(u.Password)
-
-	var b bytes.Buffer
-	err = json.NewEncoder(&b).Encode(&u)
-	if err != nil {
-		t.Error(err)
-	}
-
 	rr := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodPut, "/{id}", &b)
+	req := httptest.NewRequest(http.MethodGet, "/{id}", nil)
 
 	ctx := chi.NewRouteContext()
 	ctx.URLParams.Add("id", "1")
