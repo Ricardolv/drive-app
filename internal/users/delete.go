@@ -23,6 +23,7 @@ func (h *handler) Delete(rw http.ResponseWriter, rq *http.Request) {
 		return
 	}
 
+	rw.WriteHeader(http.StatusNoContent)
 	rw.Header().Set("Content-Type", "application/json")
 }
 
