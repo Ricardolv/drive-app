@@ -10,7 +10,7 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 )
 
-func TestCreate(t *testing.T) {
+func TestCreateHttp(t *testing.T) {
 
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -54,7 +54,7 @@ func TestCreate(t *testing.T) {
 
 }
 
-func TestInsert(t *testing.T) {
+func TestCreateDatabase(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	if err != nil {
 		t.Error(err)

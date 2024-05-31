@@ -20,7 +20,6 @@ func TestGetRootSubFolder(t *testing.T) {
 		AddRow(3, nil, "Images", time.Now(), time.Now(), false)
 
 	mock.ExpectQuery(regexp.QuoteMeta(`select * from "folders" where "parent_id" is null and "deleted"=false`)).
-		WithArgs().
 		WillReturnRows(rows)
 
 	_, err = getRootSubFolder(db)

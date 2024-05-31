@@ -10,7 +10,7 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 )
 
-func TestList(t *testing.T) {
+func TestListHttp(t *testing.T) {
 
 	db, mock, err := sqlmock.New()
 	if err != nil {

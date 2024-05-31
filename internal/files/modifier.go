@@ -42,6 +42,7 @@ func (h *handler) Modifier(rw http.ResponseWriter, rq *http.Request) {
 		return
 	}
 
+	rw.WriteHeader(http.StatusOK)
 	rw.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(rw).Encode(file)
 }

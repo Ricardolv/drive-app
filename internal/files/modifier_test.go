@@ -1,4 +1,4 @@
-package users
+package files
 
 import (
 	"bytes"
@@ -22,17 +22,20 @@ func TestModifierHttp(t *testing.T) {
 	}
 	defer db.Close()
 
-	h := handler{db}
+	h := handler{db, nil, nil}
 
-	u := User{
-		ID:   1,
-		Name: "Richard Viana",
+	f := File{
+		ID:         1,
+		Name:       "Name file png",
+		OwnerID:    1,
+		Type:       "images/png",
+		Path:       "/",
+		ModifiedAt: time.Now(),
+		Deleted:    false,
 	}
 
-	u.SetPassword(u.Password)
-
 	var b bytes.Buffer
-	err = json.NewEncoder(&b).Encode(&u)
+	err = json.NewEncoder(&b).Encode(&f)
 	if err != nil {
 		t.Error(err)
 	}
@@ -45,15 +48,15 @@ func TestModifierHttp(t *testing.T) {
 
 	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, ctx))
 
-	mock.ExpectExec(regexp.QuoteMeta(`update "users" set "name"=$1, "modified"=$2 where id=$3`)).
-		WithArgs("Richard Viana", AnyTime{}, 1).
-		WillReturnResult(sqlmock.NewResult(1, 1))
+	rows := sqlmock.NewRows([]string{"id", "folder_id", "owner_id", "name", "type", "path", "created_at", "modified_at", "deleted"}).
+		AddRow(1, 1, f.OwnerID, f.Name, f.Type, f.Path, time.Now(), f.ModifiedAt, f.Deleted)
 
-	rows := sqlmock.NewRows([]string{"id", "name", "login", "password", "created_at", "modified_at", "deleted", "last_login"}).
-		AddRow(1, "Richard", "richardluizv@gmail.com", "123456", time.Now(), time.Now(), false, time.Now())
-
-	mock.ExpectQuery(regexp.QuoteMeta(`select * from "users" where id=$1`)).
+	mock.ExpectQuery(regexp.QuoteMeta(`select * from "files" where id=$1`)).
 		WillReturnRows(rows)
+
+	mock.ExpectExec(regexp.QuoteMeta(`update "files" set "name"=$1, "modified"=$2, deleted=$3 where id=$4`)).
+		WithArgs("Name file png", AnyTime{}, false, 1).
+		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	h.Modifier(rr, req)
 
@@ -75,11 +78,11 @@ func TestModifierDatabase(t *testing.T) {
 	}
 	defer db.Close()
 
-	mock.ExpectExec(regexp.QuoteMeta(`update "users" set "name"=$1, "modified"=$2 where id=$3`)).
-		WithArgs("Richard", AnyTime{}, 1).
+	mock.ExpectExec(regexp.QuoteMeta(`update "files" set "name"=$1, "modified"=$2, deleted=$3 where id=$4`)).
+		WithArgs("Name file png", AnyTime{}, false, 1).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
-	err = Update(db, 1, &User{Name: "Richard"})
+	err = Modifier(db, 1, &File{Name: "Name file png"})
 	if err != nil {
 		t.Error(err)
 	}

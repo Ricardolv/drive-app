@@ -19,7 +19,6 @@ func TestGetFolder(t *testing.T) {
 		AddRow(1, 2, "Documents", time.Now(), time.Now(), false)
 
 	mock.ExpectQuery(regexp.QuoteMeta(`select * from "folders" where id=$1`)).
-		WithArgs().
 		WillReturnRows(rows)
 
 	_, err = GetFolder(db, 1)

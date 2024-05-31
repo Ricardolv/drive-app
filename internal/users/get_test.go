@@ -12,7 +12,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func TestGet(t *testing.T) {
+func TestGetHttp(t *testing.T) {
 
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -49,7 +49,7 @@ func TestGet(t *testing.T) {
 
 }
 
-func TestGetDatabse(t *testing.T) {
+func TestGetDatabase(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	if err != nil {
 		t.Error(err)

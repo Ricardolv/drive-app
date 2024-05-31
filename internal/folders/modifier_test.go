@@ -1,4 +1,4 @@
-package users
+package folders
 
 import (
 	"bytes"
@@ -8,7 +8,6 @@ import (
 	"net/http/httptest"
 	"regexp"
 	"testing"
-	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/go-chi/chi"
@@ -24,15 +23,13 @@ func TestModifierHttp(t *testing.T) {
 
 	h := handler{db}
 
-	u := User{
+	f := Folder{
 		ID:   1,
-		Name: "Richard Viana",
+		Name: "Test folder",
 	}
 
-	u.SetPassword(u.Password)
-
 	var b bytes.Buffer
-	err = json.NewEncoder(&b).Encode(&u)
+	err = json.NewEncoder(&b).Encode(&f)
 	if err != nil {
 		t.Error(err)
 	}
@@ -45,15 +42,9 @@ func TestModifierHttp(t *testing.T) {
 
 	req = req.WithContext(context.WithValue(req.Context(), chi.RouteCtxKey, ctx))
 
-	mock.ExpectExec(regexp.QuoteMeta(`update "users" set "name"=$1, "modified"=$2 where id=$3`)).
-		WithArgs("Richard Viana", AnyTime{}, 1).
+	mock.ExpectExec(regexp.QuoteMeta(`update "folders" set "name"=$1, "modified"=$2 where id=$3`)).
+		WithArgs("Test folder", AnyTime{}, 1).
 		WillReturnResult(sqlmock.NewResult(1, 1))
-
-	rows := sqlmock.NewRows([]string{"id", "name", "login", "password", "created_at", "modified_at", "deleted", "last_login"}).
-		AddRow(1, "Richard", "richardluizv@gmail.com", "123456", time.Now(), time.Now(), false, time.Now())
-
-	mock.ExpectQuery(regexp.QuoteMeta(`select * from "users" where id=$1`)).
-		WillReturnRows(rows)
 
 	h.Modifier(rr, req)
 
@@ -75,11 +66,11 @@ func TestModifierDatabase(t *testing.T) {
 	}
 	defer db.Close()
 
-	mock.ExpectExec(regexp.QuoteMeta(`update "users" set "name"=$1, "modified"=$2 where id=$3`)).
-		WithArgs("Richard", AnyTime{}, 1).
+	mock.ExpectExec(regexp.QuoteMeta(`update "folders" set "name"=$1, "modified"=$2 where id=$3`)).
+		WithArgs("Test folder", AnyTime{}, 1).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
-	err = Update(db, 1, &User{Name: "Richard"})
+	err = Update(db, 1, &Folder{Name: "Test folder"})
 	if err != nil {
 		t.Error(err)
 	}
